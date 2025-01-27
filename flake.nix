@@ -55,6 +55,16 @@
             lib = nixpkgs.lib;
             github = "https://github.com/SpiritOfYoink/YoinkOS";
             }; };
+        extraSpecialArgs = {
+          inherit inputs;
+          variables = {
+            user = "yoink";
+            description = "The Spirit of Yoink";
+            networking-hostname = "Ncase M2" 
+            server = "//192.168.1.70/NAS_Storage";    # Where's your network storage attached? (SMB share.)
+            lib = nixpkgs.lib;
+            github = "https://github.com/SpiritOfYoink/YoinkOS";
+            }; };
         modules = [ ./hosts/yoink/yoink.nix ];
         mutableUsers = false;   # Users and passwords cannot be changed ourside of this file.
         pkgs = import nixpkgs {
@@ -64,6 +74,15 @@
 
       dame = nixpkgs.lib.nixosSystem {
         specialArgs = {
+          inherit inputs;
+          variables = {
+            user = "dame";
+            fullname = "No Aim Dame";
+            server = "//";    # Fill this out when you build a NAS. (SMB share.)
+            lib = nixpkgs.lib;
+            github = "https://github.com/SpiritOfYoink/YoinkOS";
+            }; };
+         ExtraSpecialArgs = {
           inherit inputs;
           variables = {
             user = "dame";
