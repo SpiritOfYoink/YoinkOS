@@ -44,71 +44,38 @@
 
 #   ..... OUTPUTS .....
     outputs = { self, pkgs, lib, variables, ... }@inputs:
+    nixosConfigurations = {
 
-    let   # pkgs doesn't get imported.
-      pkgs-stable = import nixpkgs-stable {
-        system = "x86_64-linux";
-        config.allowUnfree = true;
-        };
-    in {
+      yoink = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs;
+          variables = {
+            user = "yoink";
+            fullname = "The Spirit of Yoink";
+            server = "//192.168.1.70/NAS_Storage";    # Where's your network storage attached? (SMB share.)
+            lib = nixpkgs.lib;
+            github = "https://github.com/SpiritOfYoink/YoinkOS";
+            }; };
+        modules = [ ./hosts/yoink/yoink.nix ];
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+          }; };
 
-      perInput = system: flake:
-      # Include vscode extensions in inputs'
-        nixpkgs.lib.optionalAttrs (flake ? extensions.${system}) {
-          extensions = flake.extensions.${system};
-        };
+      dame = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs;
+          variables = {
+            user = "dame";
+            fullname = "No Aim Dame";
+            server = "//";    # Fill this out when you build a NAS. (SMB share.)
+            lib = nixpkgs.lib;
+            github = "https://github.com/SpiritOfYoink/YoinkOS";
+            }; };
+        modules = [ ./hosts/dame/dame.nix ];
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+          }; };
 
-
-
-
-      nixosConfigurations = {
-        # My Lenovo 50-70y laptop with nvidia 860M
-        NixToks = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs pkgs-stable;
-          };
-
-          modules = [ ./hosts/NixToks ];
-        };
-        # My Acer Swift Go 14 with ryzen 7640U
-        NixPort = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs pkgs-stable;
-          };
-
-          modules = [ ./hosts/NixPort ];
-        };
-        # NixOS WSL setup
-        NixwsL = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs pkgs-stable;
-          };
-
-          modules = [ ./hosts/NixwsL ];
-        };
-        # Nix VM for testing major config changes
-        NixVM = nixpkgs.lib.nixosSystem {
-          specialArgs = {
-            inherit inputs pkgs-stable;
-          };
-
-          modules = [ ./hosts/NixVM ];
-        };
-      };
-      # My android phone/tablet for Termux
-      nixOnDroidConfigurations = {
-        NixMux = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
-          extraSpecialArgs = {
-            inherit inputs;
-          };
-          pkgs = import nixpkgs {
-            system = "aarch64-linux";
-
-            config.allowUnfree = true;
-          };
-
-          modules = [ ./hosts/NixMux ];
-        };
-      };
-    };
-}
+}; }   # End of file.
