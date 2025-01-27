@@ -7,7 +7,7 @@ if [ $# -gt 0 ]
   then
     SCRIPT_DIR=$1
   else
-    SCRIPT_DIR=~/.dotfiles
+    SCRIPT_DIR=/home/.dotfiles
 fi
 nix-shell -p git --command "git clone https://github.com/spiritofyoink/yoinkos $SCRIPT_DIR"
 
