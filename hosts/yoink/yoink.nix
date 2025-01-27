@@ -1,28 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Master list of all variables:
 
 even went one step further and moved all the variables from flake.nix to the folder
