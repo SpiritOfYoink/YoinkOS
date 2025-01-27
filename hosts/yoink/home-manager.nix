@@ -1,8 +1,6 @@
 
-{ config, pkgs, lib, variables, ... }:
-let
-
-in {
+# Inputs possible because of the specialArgs line in flake.nix forwarding inputs:
+{ pkgs, config, lib, inputs, variables, ... }: with lib; {
 
   imports = [
     ## Modularize your home.nix by moving statements into other files
@@ -11,11 +9,21 @@ in {
   home.username = "${variables.username}";
   home.homeDirectory = "/home/${variables.username}"
 
-  home.stateVersion = "23.05"; # Don't change this. This will not upgrade your home-manager.
+  home.stateVersion = "24.11";    # Don't change this. This will not upgrade your home-manager.
   programs.home-manager.enable = true;
+
+   
+
+    users.mutableUsers = false;   # Users and passwords cannot be changed ourside of this file.
+
+
+  home.sessionVariables = {
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\\\${HOME}/.steam/root/compatibilitytools.d";
+    };
 
   home.packages = with pkgs; ([
     # Common packages
     hello
+    protonup
     ]);
 }

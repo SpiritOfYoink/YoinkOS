@@ -39,11 +39,9 @@
       nix-minecraft.url = "github:Infinidoge/nix-minecraft";
     };
 
- 
-
 
 #   ..... OUTPUTS .....
-    outputs = { self, pkgs, lib, variables, ... }@inputs:
+    outputs = { self, pkgs, lib, variables, home-manager, ... }@inputs:
     nixosConfigurations = {
 
       yoink = nixpkgs.lib.nixosSystem {
@@ -51,12 +49,14 @@
           inherit inputs;
           variables = {
             user = "yoink";
-            fullname = "The Spirit of Yoink";
+            description = "The Spirit of Yoink";
+            networking-hostname = "Ncase M2" 
             server = "//192.168.1.70/NAS_Storage";    # Where's your network storage attached? (SMB share.)
             lib = nixpkgs.lib;
             github = "https://github.com/SpiritOfYoink/YoinkOS";
             }; };
         modules = [ ./hosts/yoink/yoink.nix ];
+        mutableUsers = false;   # Users and passwords cannot be changed ourside of this file.
         pkgs = import nixpkgs {
           system = "x86_64-linux";
           config.allowUnfree = true;
@@ -73,6 +73,7 @@
             github = "https://github.com/SpiritOfYoink/YoinkOS";
             }; };
         modules = [ ./hosts/dame/dame.nix ];
+        mutableUsers = false;   # Users and passwords cannot be changed ourside of this file.
         pkgs = import nixpkgs {
           system = "x86_64-linux";
           config.allowUnfree = true;
